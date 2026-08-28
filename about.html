@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fighter Console · King Salman</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ---- RESET & ROOT ---- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --bg: #0B0E13;
+      --bg-elevated: #10141B;
+      --card: #161B23;
+      --card-hover: #1B212B;
+      --line: #262C37;
+      --line-bright: #343C4A;
+      --text: #EDEFF3;
+      --text-dim: #939BAB;
+      --text-faint: #5C6472;
+      --green: #21E08A;
+      --red: #FF4433;
+      --amber: #F5B942;
+      --display: 'Big Shoulders Display', sans-serif;
+      --body: 'Inter', sans-serif;
+      --mono: 'IBM Plex Mono', monospace;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ---- HEADER (mini) ---- */
+    header {
+      background: rgba(11, 14, 19, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+    .nav-console {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .logo .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+    }
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .nav-links a {
+      border-bottom: 1px solid transparent;
+      transition: 0.2s;
+      padding-bottom: 2px;
+    }
+    .nav-links a:hover {
+      color: var(--text);
+      border-bottom-color: var(--green);
+    }
+    .back-link {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+    .back-link:hover {
+      border-color: var(--text-dim);
+      background: var(--card-hover);
+    }
+
+    /* ---- CONSOLE HERO ---- */
+    .console-hero {
+      padding: 40px 0 20px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 32px;
+    }
+    .console-hero h1 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: clamp(32px, 6vw, 56px);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .console-hero h1 span {
+      color: var(--green);
+    }
+    .console-hero .sub {
+      font-family: var(--mono);
+      color: var(--text-faint);
+      font-size: 14px;
+      margin-top: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ---- CONSOLE GRID: left/right navigation ---- */
+    .console-grid {
+      display: flex;
+      align-items: stretch;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .nav-arrow {
+      flex: 0 0 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      font-size: 28px;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: 0.2s;
+      user-select: none;
+      font-weight: 300;
+    }
+    .nav-arrow:hover {
+      background: var(--card-hover);
+      border-color: var(--line-bright);
+      color: var(--text);
+    }
+    .nav-arrow:active {
+      transform: scale(0.94);
+    }
+
+    /* ---- CARD CONTAINER (flip) ---- */
+    .card-flip-container {
+      flex: 1;
+      perspective: 1200px;
+      min-height: 480px;
+    }
+    .card-flip {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      transform-style: preserve-3d;
+    }
+    .card-flip.flipped {
+      transform: rotateY(180deg);
+    }
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--line);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .card-face-back {
+      transform: rotateY(180deg);
+      background: var(--bg-elevated);
+    }
+
+    /* ---- FRONT CARD (stats & techniques) ---- */
+    .fighter-header {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .fighter-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--line-bright);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .fighter-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .fighter-nameplate h2 {
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 28px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .fighter-nameplate .nick {
+      font-family: var(--mono);
+      color: var(--green);
+      font-size: 14px;
+      letter-spacing: 0.04em;
+    }
+    .fighter-nameplate .record {
+      font-family: var(--mono);
+      color: var(--text-dim);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .fighter-nameplate .record b {
+      color: var(--text);
+    }
+
+    /* stat bars */
+    .stat-section {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 28px;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-item .label {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-faint);
+    }
+    .stat-item .bar-bg {
+      height: 6px;
+      background: var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .stat-item .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--green), #3CEB9E);
+      width: 0%;
+    }
+    .stat-item .value {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* technique tags */
+    .tech-section {
+      margin-top: 24px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+    .tech-section h4 {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+    }
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .tech-tag {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      transition: 0.2s;
+      cursor: default;
+    }
+    .tech-tag:hover {
+      border-color: var(--green);
+      color: var(--text);
+    }
+    .tech-tag .highlight {
+      color: var(--amber);
+    }
+
+    /* ---- BACK CARD (detailed stats & fight style) ---- */
+    .back-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 32px;
+      margin-top: 8px;
+    }
+    .back-stat {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+    }
+    .back-stat .label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .back-stat .number {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .back-stat .number small {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-dim);
+      margin-left: 6px;
+    }
+    .back-stat .desc {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .style-box {
+      grid-column: 1 / -1;
+      background: var(--card);
+      border-radius: 14px;
+      padding: 16px 20px;
+      border: 1px solid var(--line);
+      margin-top: 6px;
+    }
+    .style-box p {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+    .style-box strong {
+      color: var(--text);
+    }
+
+    /* flip button */
+    .flip-btn {
+      align-self: flex-start;
+      margin-top: 20px;
+      background: transparent;
+      border: 1px solid var(--line-bright);
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 18px;
+      border-radius: 30px;
+      transition: 0.2s;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+    }
+    .flip-btn:hover {
+      background: var(--card);
+      border-color: var(--text-dim);
+      color: var(--text);
+    }
+
+    /* ---- FOOTER ---- */
+    .console-footer {
+      margin-top: auto;
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+
+    /* ---- responsive ---- */
+    @media (max-width: 700px) {
+      .console-grid {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .nav-arrow {
+        flex: 0 0 44px;
+        font-size: 20px;
+        border-radius: 12px;
+      }
+      .card-flip-container {
+        min-height: 580px;
+      }
+      .stat-section {
+        grid-template-columns: 1fr;
+      }
+      .back-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .fighter-header {
+        gap: 16px;
+      }
+      .fighter-nameplate h2 {
+        font-size: 22px;
+      }
+      .card-face {
+        padding: 20px;
+      }
+      .wrap {
+        padding: 0 16px;
+      }
+    }
+    @media (max-width: 480px) {
+      .nav-links {
+        font-size: 11px;
+        gap: 10px;
+      }
+      .back-link {
+        font-size: 11px;
+        padding: 4px 12px;
+      }
+    }
+
+    /* scrollbar style */
+    .card-face::-webkit-scrollbar {
+      width: 4px;
+    }
+    .card-face::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    .card-face::-webkit-scrollbar-thumb {
+      background: var(--line-bright);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="wrap nav-console">
+      <a href="#" class="logo"><span class="dot"></span>PODIUM</a>
+      <div class="nav-links">
+        <a href="#">FIGHTERS</a>
+        <a href="#">RANKINGS</a>
+        <a href="#" class="back-link">← BACK TO REELS</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONSOLE -->
+  <div class="wrap" style="flex:1;">
+
+    <div class="console-hero">
+      <h1>⚔️ FIGHTER <span>CONSOLE</span></h1>
+      <div class="sub">// KING SALMAN · THE GAZA WARRIOR // press ← → or click arrows</div>
+    </div>
+
+    <div class="console-grid">
+      <!-- LEFT ARROW -->
+      <div class="nav-arrow" id="leftArrow">◀</div>
+
+      <!-- FLIP CARD -->
+      <div class="card-flip-container">
+        <div class="card-flip" id="flipCard">
+
+          <!-- FRONT -->
+          <div class="card-face card-face-front">
+            <div class="fighter-header">
+              <div class="fighter-avatar">
+                <img src="avatar.jpg" alt="King Salman avatar" />
+              </div>
+              <div class="fighter-nameplate">
+                <h2>King Salman</h2>
+                <div class="nick">"THE GAZA WARRIOR"</div>
+                <div class="record"><b>12-2-0</b> (W-L-D) · 8 KO · 4 SUB</div>
+              </div>
+            </div>
+
+            <!-- STAT BARS -->
+            <div class="stat-section">
+              <div class="stat-item">
+                <span class="label">Striking Power</span>
+                <div class="bar-bg"><div class="bar-fill" style="width:92%"></div></div>
+                <span class="value">92 / 100</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Grappling</span>
+                <div class="bar-bg"><div class="bar-fill" style="width:78%"></div></div>
+                <span class="value">78 / 100</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Speed & Agility</span>
+                <div class="bar-bg"><div class="bar-fill" style="width:88%"></div></div>
+                <span class="value">88 / 100</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Cardio / Recovery</span>
+                <div class="bar-bg"><div class="bar-fill" style="width:85%"></div></div>
+                <span class="value">85 / 100</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Defense (TDD)</span>
+                <div class="bar-bg"><div class="bar-fill" style="width:81%"></div></div>
+                <span class="value">81 / 100</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Fight IQ</span>
+                <div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div>
+                <span class="value">90 / 100</span>
+              </div>
+            </div>
+
+            <!-- TECHNIQUES -->
+            <div class="tech-section">
+              <h4>🛡️ signature techniques</h4>
+              <div class="tech-tags">
+                <span class="tech-tag">⚡ <span class="highlight">Superman Punch</span></span>
+                <span class="tech-tag">🌀 <span class="highlight">Spinning Backfist</span></span>
+                <span class="tech-tag">🦵 <span class="highlight">Oblique Kick</span></span>
+                <span class="tech-tag">🤼 <span class="highlight">Double Leg Takedown</span></span>
+                <span class="tech-tag">🔒 <span class="highlight">Guillotine Choke</span></span>
+                <span class="tech-tag">👊 <span class="highlight">1-2-3 Combo</span></span>
+                <span class="tech-tag">🦶 <span class="highlight">Switch Kick</span></span>
+                <span class="tech-tag">🧠 <span class="highlight">Cage Control</span></span>
+              </div>
+            </div>
+
+            <button class="flip-btn" id="flipFrontBtn">↻ FLIP FOR DETAILS</button>
+          </div>
+
+          <!-- BACK -->
+          <div class="card-face card-face-back">
+            <h3 style="font-family:var(--display); font-weight:700; font-size:22px; text-transform:uppercase; letter-spacing:0.02em; margin-bottom:12px;">📊 advanced stats</h3>
+            <div class="back-grid">
+              <div class="back-stat">
+                <div class="label">Significant Strikes Landed</div>
+                <div class="number">4.8 <small>per min</small></div>
+                <div class="desc">accuracy: 58%</div>
+              </div>
+              <div class="back-stat">
+                <div class="label">Takedown Average</div>
+                <div class="number">3.2 <small>/ 15 min</small></div>
+                <div class="desc">accuracy: 44%</div>
+              </div>
+              <div class="back-stat">
+                <div class="label">Submission Attempts</div>
+                <div class="number">1.6 <small>per fight</small></div>
+                <div class="desc">finish rate: 33%</div>
+              </div>
+              <div class="back-stat">
+                <div class="label">Striking Defense</div>
+                <div class="number">62% <small>avoided</small></div>
+                <div class="desc">head strikes absorbed: 2.1/min</div>
+              </div>
+              <div class="back-stat">
+                <div class="label">Takedown Defense</div>
+                <div class="number">81% <small>stopped</small></div>
+                <div class="desc">average time on ground: 1:24</div>
+              </div>
+              <div class="back-stat">
+                <div class="label">Fight Finish Rate</div>
+                <div class="number">71% <small>finishes</small></div>
+                <div class="desc">8 KO · 4 SUB · 2 DEC</div>
+              </div>
+              <!-- style box -->
+              <div class="style-box">
+                <p><strong>🥊 fighting style:</strong> Aggressive pressure striker with heavy hands. Utilizes a wide stance to set up powerful kicks and overhands. Excellent at closing the distance and mixing in takedowns to keep opponents guessing. <strong>“Gaza Warrior”</strong> mentality — relentless pace, never backs down.</p>
+              </div>
+            </div>
+            <button class="flip-btn" id="flipBackBtn" style="margin-top:16px;">↻ BACK TO STATS</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT ARROW -->
+      <div class="nav-arrow" id="rightArrow">▶</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="console-footer wrap">
+    PODIUM · KING SALMAN · MMA CONSOLE v1.0
+  </div>
+
+  <script>
+    (function() {
+      const flipCard = document.getElementById('flipCard');
+      const frontBtn = document.getElementById('flipFrontBtn');
+      const backBtn = document.getElementById('flipBackBtn');
+      const leftArrow = document.getElementById('leftArrow');
+      const rightArrow = document.getElementById('rightArrow');
+
+      // ---- FLIP ----
+      function flip() {
+        flipCard.classList.toggle('flipped');
+      }
+
+      frontBtn.addEventListener('click', flip);
+      backBtn.addEventListener('click', flip);
+
+      // ---- ARROW NAVIGATION (cycle through "fighters" – here we just flip) ----
+      // but we also add a subtle "next fighter" feel: we flip and change some text.
+      // For a static demo, we'll rotate through 3 "views" by flipping + updating stats.
+      // Actually we just flip to show the back, but we can also simulate "next fighter"
+      // by toggling between a few preset fighters? We'll keep it simple: left/right flips.
+      leftArrow.addEventListener('click', function(e) {
+        e.stopPropagation();
+        flip();
+        // add a tiny haptic feedback
+        leftArrow.style.transform = 'scale(0.92)';
+        setTimeout(() => leftArrow.style.transform = '', 150);
+      });
+
+      rightArrow.addEventListener('click', function(e) {
+        e.stopPropagation();
+        flip();
+        rightArrow.style.transform = 'scale(0.92)';
+        setTimeout(() => rightArrow.style.transform = '', 150);
+      });
+
+      // keyboard support
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          flip();
+          // flash arrow
+          const arrow = e.key === 'ArrowLeft' ? leftArrow : rightArrow;
+          arrow.style.transform = 'scale(0.92)';
+          setTimeout(() => arrow.style.transform = '', 150);
+        }
+      });
+
+      // ---- extra: random technique highlight on hover (just for fun) ----
+      const tags = document.querySelectorAll('.tech-tag');
+      tags.forEach(tag => {
+        tag.addEventListener('mouseenter', function() {
+          this.style.borderColor = 'var(--amber)';
+          this.style.color = 'var(--text)';
+          this.style.background = 'rgba(245,185,66,0.08)';
+        });
+        tag.addEventListener('mouseleave', function() {
+          this.style.borderColor = '';
+          this.style.color = '';
+          this.style.background = '';
+        });
+      });
+
+      // ---- simulate "console" beep on flip (optional) ----
+      // just a tiny visual pulse on the card
+      const container = document.querySelector('.card-flip-container');
+      flipCard.addEventListener('transitionend', function(e) {
+        if (e.propertyName === 'transform') {
+          container.style.boxShadow = '0 0 0 2px rgba(33,224,138,0.2)';
+          setTimeout(() => container.style.boxShadow = '', 300);
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>
