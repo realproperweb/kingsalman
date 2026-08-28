@@ -466,11 +466,11 @@
   <!-- HEADER -->
   <header>
     <div class="wrap nav-console">
-      <a href="#" class="logo"><span class="dot"></span>PODIUM</a>
+      <a href="index.html" class="logo"><span class="dot"></span>PODIUM</a>
       <div class="nav-links">
         <a href="#">FIGHTERS</a>
         <a href="#">RANKINGS</a>
-        <a href="#" class="back-link">← BACK TO REELS</a>
+        <a href="index.html" class="back-link">← BACK TO REELS</a>
       </div>
     </div>
   </header>
@@ -626,15 +626,10 @@
       frontBtn.addEventListener('click', flip);
       backBtn.addEventListener('click', flip);
 
-      // ---- ARROW NAVIGATION (cycle through "fighters" – here we just flip) ----
-      // but we also add a subtle "next fighter" feel: we flip and change some text.
-      // For a static demo, we'll rotate through 3 "views" by flipping + updating stats.
-      // Actually we just flip to show the back, but we can also simulate "next fighter"
-      // by toggling between a few preset fighters? We'll keep it simple: left/right flips.
+      // ---- ARROW NAVIGATION ----
       leftArrow.addEventListener('click', function(e) {
         e.stopPropagation();
         flip();
-        // add a tiny haptic feedback
         leftArrow.style.transform = 'scale(0.92)';
         setTimeout(() => leftArrow.style.transform = '', 150);
       });
@@ -651,14 +646,13 @@
         if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
           e.preventDefault();
           flip();
-          // flash arrow
           const arrow = e.key === 'ArrowLeft' ? leftArrow : rightArrow;
           arrow.style.transform = 'scale(0.92)';
           setTimeout(() => arrow.style.transform = '', 150);
         }
       });
 
-      // ---- extra: random technique highlight on hover (just for fun) ----
+      // ---- technique hover effect ----
       const tags = document.querySelectorAll('.tech-tag');
       tags.forEach(tag => {
         tag.addEventListener('mouseenter', function() {
@@ -673,8 +667,7 @@
         });
       });
 
-      // ---- simulate "console" beep on flip (optional) ----
-      // just a tiny visual pulse on the card
+      // ---- pulse on flip ----
       const container = document.querySelector('.card-flip-container');
       flipCard.addEventListener('transitionend', function(e) {
         if (e.propertyName === 'transform') {
