@@ -138,84 +138,41 @@
   /* ---------- VIDEO GRID ---------- */
   .grid{
     display:grid;
-    grid-template-columns:repeat(4, 1fr);
+    grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
     gap:20px;
     padding-bottom:80px;
   }
-  @media (max-width:1000px){ .grid{ grid-template-columns:repeat(3,1fr); } }
-  @media (max-width:720px){ .grid{ grid-template-columns:repeat(2,1fr); } }
-  @media (max-width:480px){ .grid{ grid-template-columns:1fr; } }
+  @media (max-width:480px){ .grid{ grid-template-columns:1fr; max-width:280px; margin:0 auto; } }
 
   .card{
     background:var(--card);
     border:1px solid var(--line);
     border-radius:12px;
     overflow:hidden;
-    cursor:pointer;
     transition:transform .15s ease, border-color .15s ease;
   }
   .card:hover{ transform:translateY(-3px); border-color:var(--line-bright); }
   .thumb{
     position:relative;
-    aspect-ratio:9/16;
-    background:
-      radial-gradient(circle at 30% 20%, rgba(33,224,138,0.14), transparent 55%),
-      linear-gradient(160deg, #171D26, #0D1015);
+    aspect-ratio:267/476;
+    background:#000;
     display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .thumb iframe{
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
+    border:none;
   }
   .thumb .idx{
-    position:absolute; top:10px; left:10px;
+    position:absolute; top:10px; left:10px; z-index:2;
     font-family:var(--mono); font-size:11px; color:var(--text-faint);
-    background:rgba(0,0,0,0.4); padding:3px 7px; border-radius:4px;
+    background:rgba(0,0,0,0.55); padding:3px 7px; border-radius:4px;
+    pointer-events:none;
   }
-  .thumb .live-tag{
-    position:absolute; top:10px; right:10px;
-    font-family:var(--mono); font-size:10px; color:var(--red);
-    background:rgba(0,0,0,0.4); padding:3px 7px; border-radius:4px;
-    display:flex; align-items:center; gap:5px;
-  }
-  .thumb .live-tag i{ width:6px; height:6px; border-radius:50%; background:var(--red); }
-  .play-ico{
-    width:52px; height:52px; border-radius:50%;
-    background:rgba(237,239,243,0.08);
-    border:1px solid rgba(237,239,243,0.2);
-    display:flex; align-items:center; justify-content:center;
-    transition:background .15s ease, transform .15s ease;
-  }
-  .card:hover .play-ico{ background:var(--green); transform:scale(1.08); }
-  .play-ico svg{ margin-left:3px; }
-  .card:hover .play-ico svg path{ fill:#06140D; }
   .card-info{ padding:12px 14px 14px; }
   .card-title{ font-size:13.5px; font-weight:600; margin-bottom:4px; }
   .card-meta{ font-family:var(--mono); font-size:11px; color:var(--text-faint); }
-
-  /* ---------- MODAL ---------- */
-  .modal-overlay{
-    position:fixed; inset:0; z-index:100;
-    background:rgba(6,8,11,0.88);
-    display:none; align-items:center; justify-content:center;
-    padding:24px;
-  }
-  .modal-overlay.open{ display:flex; }
-  .modal-box{
-    background:var(--card);
-    border:1px solid var(--line-bright);
-    border-radius:14px;
-    padding:16px;
-    max-width:340px; width:100%;
-    position:relative;
-  }
-  .modal-close{
-    position:absolute; top:-14px; right:-14px;
-    width:32px; height:32px; border-radius:50%;
-    background:var(--text); color:var(--bg);
-    display:flex; align-items:center; justify-content:center;
-    font-size:16px; font-weight:700; border:none;
-  }
-  .modal-frame-wrap{
-    border-radius:8px; overflow:hidden; background:#000;
-    display:flex; justify-content:center;
-  }
 
   footer{
     border-top:1px solid var(--line);
@@ -276,13 +233,6 @@
 
 <footer>PODIUM · KING SALMAN CHANNEL · REELS EMBEDDED VIA FACEBOOK</footer>
 
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal-box">
-    <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
-    <div class="modal-frame-wrap" id="modal-frame-wrap"></div>
-  </div>
-</div>
-
 <script>
   const reelIds = [
     "1400764614880497","1764943114540125","29055743224013100","1633656611428155",
@@ -296,41 +246,25 @@
   const grid = document.getElementById('video-grid');
   document.getElementById('reel-count').textContent = reelIds.length + ' REELS';
 
-  const playSvg = `<svg width="20" height="20" viewBox="0 0 20 20"><path d="M5 3l12 7-12 7V3z" fill="#EDEFF3"/></svg>`;
-
   reelIds.forEach((id, i) => {
+    const href = encodeURIComponent(`https://www.facebook.com/reel/${id}/`);
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
       <div class="thumb">
         <span class="idx">REEL ${String(i+1).padStart(2,'0')}</span>
-        <span class="live-tag"><i></i>FB</span>
-        <div class="play-ico">${playSvg}</div>
+        <iframe src="https://www.facebook.com/plugins/video.php?height=476&href=${href}&show_text=false&width=267&t=0"
+          scrolling="no" frameborder="0" allowfullscreen="true"
+          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+          loading="lazy"></iframe>
       </div>
       <div class="card-info">
         <div class="card-title">King Salman — Reel ${i+1}</div>
         <div class="card-meta">facebook.com/reel/${id}</div>
       </div>
     `;
-    card.addEventListener('click', () => openModal(id));
     grid.appendChild(card);
   });
-
-  const overlay = document.getElementById('modal-overlay');
-  const frameWrap = document.getElementById('modal-frame-wrap');
-
-  function openModal(id){
-    const href = encodeURIComponent(`https://www.facebook.com/reel/${id}/`);
-    frameWrap.innerHTML = `<iframe src="https://www.facebook.com/plugins/video.php?height=476&href=${href}&show_text=false&width=267&t=0" width="267" height="476" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`;
-    overlay.classList.add('open');
-  }
-  function closeModal(){
-    overlay.classList.remove('open');
-    frameWrap.innerHTML = '';
-  }
-  document.getElementById('modal-close').addEventListener('click', closeModal);
-  overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
 </script>
 
 </body>
