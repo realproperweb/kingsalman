@@ -301,75 +301,57 @@
     font-weight: 400;
     letter-spacing: 0.04em;
   }
-  .modal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  .modal-content-bottom {
+    padding: 24px 32px 32px;
+    background: var(--bg-elevated);
   }
-  .modal-form input {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 14px 18px;
+  .modal-content-bottom p {
+    color: var(--text-dim);
     font-size: 14px;
-    font-family: var(--body);
-    color: var(--text);
-    transition: border-color 0.2s ease;
+    line-height: 1.6;
+    margin-bottom: 16px;
   }
-  .modal-form input::placeholder {
-    color: var(--text-faint);
-  }
-  .modal-form input:focus {
-    outline: none;
-    border-color: var(--amber);
-  }
-  .modal-form .input-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  .modal-form .input-row input {
+  .modal-content-bottom .cta-button {
+    display: block;
     width: 100%;
-  }
-  .modal-form .submit-btn {
+    text-align: center;
     background: linear-gradient(135deg, var(--amber), #E6A800);
     color: #0B0E13;
     font-family: var(--display);
     font-weight: 800;
-    font-size: 18px;
+    font-size: 20px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    padding: 16px;
+    padding: 18px;
     border-radius: 10px;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
-    margin-top: 4px;
     border: none;
     cursor: pointer;
   }
-  .modal-form .submit-btn:hover {
+  .modal-content-bottom .cta-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(245, 185, 66, 0.25);
   }
-  .modal-form .submit-btn:active {
+  .modal-content-bottom .cta-button:active {
     transform: translateY(0);
   }
-  .modal-form .disclaimer {
+  .modal-content-bottom .disclaimer {
     font-size: 11px;
     color: var(--text-faint);
     text-align: center;
     font-family: var(--mono);
     letter-spacing: 0.02em;
-    margin-top: 4px;
+    margin-top: 14px;
   }
-  .modal-form .disclaimer a {
+  .modal-content-bottom .disclaimer a {
     color: var(--green);
     text-decoration: underline;
   }
   @media (max-width: 480px) {
     .modal-bg { padding: 28px 20px 24px; min-height: 220px; }
     .modal-title { font-size: 26px; }
-    .modal-form .input-row { grid-template-columns: 1fr; }
-    .modal-form .submit-btn { font-size: 16px; padding: 14px; }
+    .modal-content-bottom { padding: 20px; }
+    .modal-content-bottom .cta-button { font-size: 17px; padding: 16px; }
   }
 
   /* ---------- NAV ---------- */
@@ -442,7 +424,6 @@
     font-size:13.5px; color:var(--text-dim); flex-wrap:wrap;
   }
   .profile-stats b{ color:var(--text); font-weight:600; }
-  .profile-actions{ display:flex; gap:12px; padding-bottom:6px; }
 
   .about-strip{
     padding:22px 0 26px;
@@ -602,21 +583,16 @@
       </div>
     </div>
     
-    <div style="padding: 24px 32px 32px; background: var(--bg-elevated);">
-      <form class="modal-form" id="whitelistForm">
-        <div class="input-row">
-          <input type="text" placeholder="First name" required>
-          <input type="text" placeholder="Last name" required>
-        </div>
-        <input type="email" placeholder="Email address" required>
-        <input type="text" placeholder="Bybit UID (optional)">
-        
-        <button type="submit" class="submit-btn">Join Whitelist →</button>
-        <p class="disclaimer">
-          By joining you agree to receive updates about the KSMAN token. 
-          <a href="#">Privacy Policy</a>
-        </p>
-      </form>
+    <div class="modal-content-bottom">
+      <p>Join the King Salman Meme Token whitelist and claim your <strong>10,000 KSMAN</strong> bonus. By joining, you'll be among the first to access the token on the Bybit network.</p>
+      
+      <a href="https://partner.bybit.com/b/KINGSALMAN" target="_blank" rel="noopener noreferrer" class="cta-button">
+        Join Whitelist →
+      </a>
+      
+      <p class="disclaimer">
+        By clicking you'll be directed to Bybit. <a href="https://partner.bybit.com/b/KINGSALMAN" target="_blank" rel="noopener noreferrer">Terms apply</a>
+      </p>
     </div>
   </div>
 </div>
@@ -644,14 +620,10 @@
         <span><b>124K</b> followers</span>
       </div>
     </div>
-    <div class="profile-actions">
-      <a href="https://wa.me/970597226765" class="btn btn-ghost">Message</a>
-      <a href="https://www.facebook.com/profile.php?id=61586914149981" class="btn btn-primary">Follow</a>
-    </div>
   </div>
 
   <div class="about-strip">
-    <p>SALMAN “THE GAZA WARRIOR” from the Gaza Strip, all message and follow or any direct link to this profile https://www.facebook.com/profile.php?id=61586914149981</p>
+    <p>SALMAN “THE GAZA WARRIOR” from the Gaza Strip.</p>
     <div class="badge-row">
       <span class="badge">MMA</span>
       <span class="badge">Podium Founding Athlete</span>
@@ -735,7 +707,6 @@
     const adBanner = document.getElementById('adBanner');
     const modal = document.getElementById('whitelistModal');
     const closeBtn = document.getElementById('modalClose');
-    const form = document.getElementById('whitelistForm');
 
     function openModal(e) {
       e.preventDefault();
@@ -762,25 +733,6 @@
       if (e.key === 'Escape' && modal.classList.contains('active')) {
         closeModal();
       }
-    });
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Simple success feedback
-      const btn = form.querySelector('.submit-btn');
-      const originalText = btn.textContent;
-      btn.textContent = '✓ Whitelisted!';
-      btn.style.background = 'linear-gradient(135deg, var(--green), #1AB87A)';
-      btn.disabled = true;
-      
-      setTimeout(() => {
-        btn.textContent = originalText;
-        btn.style.background = '';
-        btn.disabled = false;
-        closeModal();
-        form.reset();
-      }, 2500);
     });
 
     // Handle iframe errors silently
