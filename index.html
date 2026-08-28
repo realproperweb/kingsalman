@@ -36,10 +36,58 @@
   :focus-visible{ outline:2px solid var(--green); outline-offset:3px; }
   .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
 
+  /* ---------- SCROLLING AD BANNER ---------- */
+  .ad-banner {
+    background: linear-gradient(90deg, #0F2A20, #1B3A2C, #0F2A20);
+    border-bottom: 2px solid var(--green);
+    padding: 10px 0;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(33, 224, 138, 0.15);
+  }
+  .ad-banner a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(16px, 2.5vw, 28px);
+    letter-spacing: 0.05em;
+    color: var(--text);
+    text-transform: uppercase;
+    white-space: nowrap;
+    animation: scrollAd 20s linear infinite;
+    padding: 0 20px;
+  }
+  .ad-banner a .highlight {
+    color: var(--green);
+    margin: 0 12px;
+    display: inline-block;
+  }
+  .ad-banner a .arrow {
+    display: inline-block;
+    margin: 0 8px;
+    animation: pulseArrow 1.5s ease-in-out infinite;
+  }
+  @keyframes scrollAd {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  @keyframes pulseArrow {
+    0%, 100% { transform: translateX(0); opacity: 1; }
+    50% { transform: translateX(6px); opacity: 0.7; }
+  }
+  @media (max-width: 600px) {
+    .ad-banner a {
+      animation-duration: 12s;
+      font-size: 14px;
+    }
+  }
+
   /* ---------- NAV ---------- */
   header{
     position:sticky; top:0; z-index:50;
-    background:rgba(11,14,19,0.9);
+    background:rgba(11,14,19,0.95);
     backdrop-filter: blur(10px);
     border-bottom:1px solid var(--line);
   }
@@ -219,6 +267,23 @@
 </style>
 </head>
 <body>
+
+<!-- SCROLLING AD BANNER -->
+<div class="ad-banner">
+  <a href="https://partner.bybit.com/b/KINGSALMAN" target="_blank" rel="noopener noreferrer">
+    <span class="highlight">🔥 BYBIT AFFILIATE</span>
+    <span class="arrow">→</span>
+    TRADE WITH KING SALMAN
+    <span class="arrow">→</span>
+    <span class="highlight">⚡ EXCLUSIVE BONUSES</span>
+    <span class="arrow">→</span>
+    JOIN NOW
+    <span class="arrow">→</span>
+    <span class="highlight">🚀 KINGSALMAN</span>
+    <span class="arrow">→</span>
+    BYBIT PARTNER
+  </a>
+</div>
 
 <header>
   <nav class="wrap">
